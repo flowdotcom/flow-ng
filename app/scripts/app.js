@@ -10,32 +10,31 @@
  */
 angular
   .module('flowNgApp', [
+    'ui.router',
     'ngAnimate',
     'ngAria',
     'ngCookies',
     'ngMessages',
     'ngResource',
-    'ui.router',
     'ngSanitize',
     'ngTouch',
     'satellizer',
-    'angular-loading-bar',
-    'ngBootstrap',
+    'angularMoment',
     'ui.bootstrap',
-    'LocalStorageModule',
-    'angularMoment'
+    'angular-loading-bar',
+    'LocalStorageModule'
   ])
 
   .constant('ConfigData', {
-    'api_endpoint': 'http://flow-webapp.dev/'
+    'apiEndpoint': 'http://flow-webapp.dev/api/'
   })
 
   .constant('angularMomentConfig', {
     timezone: 'Europe/Paris'
   })
 
-  .run(function ($rootScope, $window, $auth, $location, $state, $log, editableOptions) {
-    $rootScope.$on("$stateChangeStart", function (event, toState) {
+  .run(function ($rootScope, $window, $auth, $location, $state, $log) {
+    $rootScope.$on('$stateChangeStart', function (event, toState) {
       $log.debug('check auth status');
       if (toState.authenticated && (!$auth.isAuthenticated() || $auth.getPayload().exp >= Date.now() || $auth.getPayload() === undefined)) {
         $rootScope = $rootScope.$new(true);
@@ -56,7 +55,6 @@ angular
       $window.history.back();
     };
 
-    editableOptions.theme = 'bs3';
     $rootScope.jqueryDebugEnabled = false;
   })
 
@@ -73,51 +71,42 @@ angular
     cfpLoadingBarProvider.latencyThreshold = 100;
   }])
 
+  .config(function ($stateProvider, $urlRouterProvider, $authProvider, $httpProvider, ConfigData) {
 
-config(function ($stateProvider, $urlRouterProvider, $authProvider, $httpProvider, ConfigData) {
-  $stateProvider
+    //Auth Login
+    $stateProvider
+      .state('login', {
+        url: '/login',
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .state('logout', {
+        url: '/logout',
+        template: null,
+        controller: 'LogoutCtrl'
+      })
 
-  //Auth Login
-    .state('login', {
-      url: "/login",
-      templateUrl: 'views/login.html',
-      controller: 'LoginCtrl',
-    })
-    .state('logout', {
-      url: "/logout",
-      template: null,
-      controller: 'LogoutCtrl'
-    })
+      //Main Layout
+      .state('app', {
+        url: '/app',
+        abstract: true,
+        templateUrl: 'views/app.html',
+        controller: 'AppCtrl',
+        authenticated: true
+      })
 
-    //Main Layout
-    .state('app', {
-      url: "/app",
-      abstract: true,
-      templateUrl: 'views/app.html',
-      controller: 'AppCtrl',
-      authenticated: true
-    })
-    .state('app.home', {
-      url: "/home",
-      templateUrl: 'views/home.html',
-      controller: 'HomeCtrl',
-      authenticated: true
-    })
+      .state('app.home', {
+        url: '/home',
+        templateUrl: 'views/home.html',
+        controller: 'HomeCtrl',
+        authenticated: true
+      });
 
-    .state('app.about', {
-      url: "/about",
-      templateUrl: 'views/about.html',
-      controller: 'AboutCtrl',
-      authenticated: true
-    })
+    $urlRouterProvider.otherwise('/app/home');
 
-  $urlRouterProvider.otherwise("/app/home");
+    $authProvider.loginUrl = ConfigData.apiEndpoint + 'auth/signin';
+    $authProvider.tokenRoot = 'data';
+    $authProvider.httpInterceptor = true;
+    $authProvider.platform = 'browser';
 
-  $authProvider.loginUrl = ConfigData.api_endpoint + 'api/auth/signin';
-  $authProvider.signupUrl = ConfigData.api_endpoint + 'api/uth/signup';
-  $authProvider.tokenRoot = 'data';
-  $authProvider.httpInterceptor = true;
-  $authProvider.platform = 'browser';
-  //$authProvider.authHeader = 'x-access-token';
-
-});
+  });
