@@ -6,20 +6,20 @@
 
         <div class="side-header side-content bg-white-op">
           <a class="h5 text-white" ui-sref="app.home">
-            <img src="###" class="flowlogo" alt="flow-logo">
+            <img src="images/flow/logo.png" class="flowlogo" alt="flow-logo">
           </a>
         </div>
 
         <div class="side-content">
-          <ul class="nav-main">
+          <ul class="nav-main" data-js-main-nav>
             <li>
               <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                <i class="si si-speedometer"></i>
+                <i class="fa fa-home"></i>
                 <span class="sidebar-mini-hide">Application</span>
               </a>
               <ul>
                 <li>
-                  <a ui-sref="app.home">Acceuil</a>
+                  <a ui-sref="app.home" data-ui-sref-active="active">Acceuil</a>
                 </li>
               </ul>
             </li>
@@ -56,7 +56,7 @@
     <div ui-view></div>
   </main>
 
-  <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
+  <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix" style="position: fixed; bottom: 0;">
     <div class="font-s12 clearfix">
       <div class="pull-left">
         <a class="font-w600" href="#" target="_blank">Flow Tickets</a> &copy; <span class="js-year-copy"></span>
@@ -65,3 +65,6 @@
   </footer>
 
 </div>
+
+
+

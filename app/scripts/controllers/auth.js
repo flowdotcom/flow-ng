@@ -8,7 +8,7 @@
  * Controller of the flowNgApp
  */
 angular.module('flowNgApp')
-  .controller('LoginCtrl', function ($scope, $auth, $window, $rootScope, $log) {
+  .controller('LoginCtrl', function ($scope, $auth, $window, $rootScope, $log, $state) {
 
     $log.debug('LoginCtrl - initialize');
 
@@ -18,6 +18,7 @@ angular.module('flowNgApp')
       $auth.login({email: $scope.email, password: $scope.password}).then(function (response) {
         $window.localStorage.currentUser = JSON.stringify(response.data.user);
         $rootScope.currentUser = JSON.parse($window.localStorage.currentUser);
+        $state.go('app.home');
         $log.debug('LoginCtrl - authentication - success');
       }).catch(function (response) {
         $scope.messages = [];

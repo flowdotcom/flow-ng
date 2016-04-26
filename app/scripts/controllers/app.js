@@ -8,7 +8,7 @@
  * Controller of the flowNgApp
  */
 angular.module('flowNgApp')
-  .controller('AppCtrl', function ($rootScope, $scope, $log, $window, JqueryCoreService) {
+  .controller('AppCtrl', function ($rootScope, $scope, $log) {
     $log.debug('AppCtrl - initialize');
 
     $log.debug('AppCtrl - check cached data');
@@ -23,5 +23,4 @@ angular.module('flowNgApp')
 
 
     $log.debug('AppCtrl - JqueryCoreService initialize');
-    JqueryCoreService.initialize();
   });

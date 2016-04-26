@@ -55,7 +55,6 @@ angular
       $window.history.back();
     };
 
-    $rootScope.jqueryDebugEnabled = false;
   })
 
   .config(function ($logProvider) {
